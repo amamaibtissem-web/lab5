@@ -29,7 +29,8 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/frontend:v1
 
       - name: Deploy to Kubernetes
-        env:
-          KUBECONFIG: ${{ secrets.KUBECONFIG }}
         run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
           kubectl apply -f k8s/
+
