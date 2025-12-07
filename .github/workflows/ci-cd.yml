@@ -32,5 +32,6 @@ jobs:
         run: |
           mkdir -p ~/.kube
           echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
+          kubectl config view
           kubectl apply -f k8s/
 
