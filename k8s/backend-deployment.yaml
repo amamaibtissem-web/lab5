@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: backend
-          image: YOUR_DOCKERHUB_USERNAME/backend:v1
+          image: ibtissemamama/backend:v2
           ports:
             - containerPort: 3001
