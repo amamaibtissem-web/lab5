@@ -1,4 +1,4 @@
-name: CI/CD
+name: CI-CD
 
 on:
   push:
@@ -26,7 +26,7 @@ jobs:
       - name: Build & push frontend
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/frontend:v1 ./frontend
-          docker push ${{ secrets.DOCKER_USERNAME }}/frontend:v1
+          docker push ${{ secrets.DOCKER_USERNAME }}/frontend:v
 
       - name: Deploy to Kubernetes
         run: |
@@ -34,4 +34,5 @@ jobs:
           echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
           kubectl config view
           kubectl apply -f k8s/
+
 
