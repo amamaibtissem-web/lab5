@@ -6,10 +6,11 @@ on:
 
 jobs:
   build:
+    name: Build & Push Images
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Login to Docker Hub
@@ -18,15 +19,24 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build & push backend
+      - name: Build & push backend image
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/backend:v1 ./backend
           docker push ${{ secrets.DOCKER_USERNAME }}/backend:v1
 
-      - name: Build & push frontend
+      - name: Build & push frontend image
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/frontend:v1 ./frontend
           docker push ${{ secrets.DOCKER_USERNAME }}/frontend:v1
+
+  deploy:
+    name: Deploy to Kubernetes
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Install kubectl
         uses: azure/setup-kubectl@v3
@@ -43,21 +53,8 @@ jobs:
           minikube start --driver=docker
           kubectl cluster-info
 
-      - name: Deploy to Kubernetes
+      - name: Deploy application to Kubernetes
         run: |
           kubectl apply -f k8s/
           kubectl get pods
           kubectl get services
-
-
-
-
-
-
-
-
-
-
-
-
-
