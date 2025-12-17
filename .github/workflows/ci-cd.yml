@@ -28,12 +28,36 @@ jobs:
           docker build -t ${{ secrets.DOCKER_USERNAME }}/frontend:v1 ./frontend
           docker push ${{ secrets.DOCKER_USERNAME }}/frontend:v1
 
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: v1.29.0
+
+      - name: Install Minikube
+        run: |
+          curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+          sudo install minikube-linux-amd64 /usr/local/bin/minikube
+
+      - name: Start Minikube
+        run: |
+          minikube start --driver=docker
+          kubectl cluster-info
+
       - name: Deploy to Kubernetes
         run: |
-          mkdir -p ~/.kube
-          echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
-          kubectl config view
-          kubectl apply -f k8s/ --validate=false
+          kubectl apply -f k8s/
+          kubectl get pods
+          kubectl get services
+
+
+
+
+
+
+
+
+
+
 
 
 
