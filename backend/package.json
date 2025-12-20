@@ -4,6 +4,7 @@
   "main": "server.js",
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.22.1"
+    "express": "^4.22.1",
+    "prom-client": "^15.1.3"
   }
 }
